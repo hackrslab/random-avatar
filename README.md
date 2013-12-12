@@ -1,2 +1,3 @@
-random-avatar
-=============
+Random avatar generator
+=======================
+
