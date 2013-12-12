@@ -1,6 +1,8 @@
 Random avatar generator
 =======================
 
+[Download](https://raw.github.com/hackrslab/random-avatar/master/dist/random-avatar-0.1.0.jar)
+
 ## Sample
 
 ![Sample](https://raw.github.com/hackrslab/random-avatar/branch-0.1.x/samples/random.png)
