@@ -5,7 +5,7 @@ object RandomAvatarBuild extends Build {
   lazy val defaultSettings = Seq(
     organization := "org.hackrslab"
     , name := "random-avatar"
-    , version := "0.1.0"
+    , version := "0.2.0"
     , autoScalaLibrary := false
     , crossPaths := false
     , javacOptions ++= Seq("-source", "1.6", "-target", "1.6", "-encoding", "UTF-8", "-Xlint:-options")

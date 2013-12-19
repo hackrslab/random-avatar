@@ -1,7 +1,8 @@
 Random avatar generator
 =======================
 
-[Download](https://raw.github.com/hackrslab/random-avatar/master/dist/random-avatar-0.1.0.jar)
+* [0.1.0](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.1.0/random-avatar-0.1.0.jar)
+* [0.2.0](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.2.0/random-avatar-0.2.0.jar)
 
 ### Maven
 
@@ -11,7 +12,7 @@ Random avatar generator
     <dependency>
       <groupId>org.hackrslab</groupId>
       <artifactId>random-avatar</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
   </dependencies>
 
@@ -30,14 +31,14 @@ Random avatar generator
 lazy val defaultSettings = Seq(
   resolvers += "hackrslab-repository" at "http://hackrslab.github.io/maven-repo"
   , libraryDependencies ++= Seq(
-    "org.hackrslab" % "random-avatar" % "0.1.0"
+    "org.hackrslab" % "random-avatar" % "0.2.0"
   )
 )
 ```
 
 ## Sample
 
-![Sample](https://raw.github.com/hackrslab/random-avatar/branch-0.1.x/samples/random.png)
+![Sample](https://raw.github.com/hackrslab/random-avatar/branch-0.2/samples/random.png)
 
 ## Sample code
 
@@ -50,21 +51,28 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-    	Random random = new Random();
+        Random random = new Random();
         RandomAvatar generator = new RandomAvatarBuilder()
             .squareSize(400)
             .blockSize(5)
             .asymmetry(false)
             .padding(20)
-            .addColor(random.nextInt(255), random.nextInt(255), random.nextInt(255))
-            .addColor(random.nextInt(255), random.nextInt(255), random.nextInt(255))
-            .addColor(random.nextInt(255), random.nextInt(255), random.nextInt(255))
+            .backgroundColor(0xeeeeee)
+            .fontColor(0xffffff)
+            .addColor(127, 127, 220)
+            .addColor(100, 207, 172)
+            .addColor(198, 87, 181)
+            .addColor(134, 166, 220)
             .build();
 
-        generator.generate(new File("samples/avatar1.png"));
-        generator.generate(new File("samples/avatar2.png"));
-        generator.generate(new File("samples/avatar3.png"));
-        // OR generator.generate(new XyzOutputStream());
+        String[] initials = "dgkim84@gmail.com,geekple.com,kdg,kdh,insanehong".split(",");
+        for (int i = 0; i < initials.length; i++) {
+            generator.generate(new File("samples/avatar"+i+"-initial-1.png"), RandomAvatar.Extra.initial(initials[i]));
+            generator.generate(new File("samples/avatar"+i+"-initial-2.png"), RandomAvatar.Extra.initial(initials[i], 2));
+            generator.generate(new File("samples/avatar"+i+"-initial-3.png"), RandomAvatar.Extra.initial(initials[i], 3));
+            generator.generate(new File("samples/avatar"+i+"-default.png"));
+        }
+        // OR generator.generate(new XyzOutputStream(), ...);
     }
 }
 ```

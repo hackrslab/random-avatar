@@ -6,8 +6,11 @@ import java.util.ArrayList;
 public class RandomAvatarBuilder {
     private int squareSize;
     private int blockSize;
+    private boolean initial;
     private boolean asymmetry;
     private int padding;
+    private int backgroundColor = -1;
+    private int fontColor = 0xffffff;
     private List<Integer> colors;
 
     public RandomAvatarBuilder() {
@@ -69,6 +72,16 @@ public class RandomAvatarBuilder {
         return this;
     }
 
+    public RandomAvatarBuilder backgroundColor(int backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+
+    public RandomAvatarBuilder fontColor(int fontColor) {
+        this.fontColor = fontColor;
+        return this;
+    }
+
     public RandomAvatar build() {
         int[] colors = new int[this.colors.size()];
         int i = 0;
@@ -82,6 +95,8 @@ public class RandomAvatarBuilder {
         instance.setPadding(padding);
         instance.setColors(colors);
         instance.setPadding(padding);
+        instance.setBackgroundColor(backgroundColor);
+        instance.setFontColor(fontColor);
         return instance;
     }
 }
