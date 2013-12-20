@@ -8,12 +8,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 
 public class RandomAvatar {
     public static class Extra {
+        String seed;
         String initial;
 
         public Extra() {
@@ -24,9 +27,30 @@ public class RandomAvatar {
         }
 
         public static Extra initial(String initial, int length) {
+            length = Math.max(length, 0);
+            if (length == 0) {
+                length = initial.length();
+            }
             if (initial != null && initial.length() > 0) {
                 Extra extra = new Extra();
                 extra.initial = initial.substring(0, Math.min(initial.length(), length)).toUpperCase();
+                return extra;
+            }
+            return null;
+        }
+
+        public static Extra seed(String seed) {
+            return seed(seed, 0);
+        }
+
+        public static Extra seed(String seed, int length) {
+            length = Math.max(length, 0);
+            if (seed != null && seed.length() > 0) {
+                Extra extra = new Extra();
+                extra.seed = seed;
+                if (length != 0) {
+                    extra.initial = seed.substring(0, Math.min(seed.length(), length)).toUpperCase();
+                }
                 return extra;
             }
             return null;
@@ -64,7 +88,10 @@ public class RandomAvatar {
         setDefaultOptions();
         boolean[] blocks = null;
         while (!validate(blocks)) {
-            blocks = generateRandomBlocks();
+            blocks = generateRandomBlocks(extra == null ? null : extra.seed);
+            if (extra != null) {
+                break;
+            }
         }
         BufferedImage avatar = new BufferedImage(squareSize + padding * 2, squareSize + padding * 2
             , BufferedImage.TYPE_INT_ARGB);
@@ -98,7 +125,7 @@ public class RandomAvatar {
         return true;
     }
 
-    boolean[] generateRandomBlocks() {
+    boolean[] generateRandomBlocks(String seed) {
         boolean[] blocks = new boolean[blockSize * blockSize];
         for (int y = 0; y < blockSize; y++) {
             for (int x = 0; x < blockSize; x++) {
@@ -106,17 +133,48 @@ public class RandomAvatar {
                 if (blockSize / 2 < x && !asymmetry) {
                     blocks[index] = blocks[index - x + blockSize - x - 1];
                 } else {
-                    blocks[index] = new Random().nextBoolean();
+                    blocks[index] = nextBoolean(seed, blockSize, y, x);
                 }
             }
         }
         return blocks;
     }
 
+    boolean nextBoolean(String seed, int blockSize, int y, int x) {
+        if (seed == null) {
+            return new Random().nextBoolean();
+        } else {
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] values = md.digest(seed.getBytes("UTF-8"));
+                int offset = y * blockSize + x;
+                int length = values.length;
+                int b = 1 << (offset % 8);
+                return ((values[(offset / 8) % length]) & (b)) == b;
+            } catch (Exception e) {
+                return new Random().nextBoolean();
+            }
+        }
+    }
+
+    int nextInt(int n, String seed, int offset) {
+        if (seed == null) {
+            return new Random().nextInt(colors.length);
+        } else {
+            try {
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte[] values = md.digest((seed + ":" + offset).getBytes("UTF-8"));
+                return Math.abs(ByteBuffer.wrap(values).getInt()) % n;
+            } catch (Exception e) {
+                return new Random().nextInt(n);
+            }
+        }
+    }
+
     void generateAvatar(BufferedImage avatar, boolean[] blocks, Extra extra) {
         Graphics2D g = avatar.createGraphics();
         int size = squareSize / blockSize;
-        int color = colors[new Random().nextInt(colors.length)];
+        int color = colors[nextInt(colors.length, extra == null ? null : extra.seed, 0)];
         int holeBlockSizeX = 0;
         int holeBlockSizeY = 0;
 
