@@ -1,6 +1,27 @@
 Random avatar generator
 =======================
 
+## Sample
+
+**Fixed Random Image** : http://geekple.com:18191/?seed=dgkim84@gmail.com&initial=KDG
+
+![Sample](http://geekple.com:18191/?seed=dgkim84@gmail.com&initial=K&v=0.2.1)
+![Sample](http://geekple.com:18191/?seed=dgkim84@gmail.com&initial=DG&v=0.2.1)
+![Sample](http://geekple.com:18191/?seed=dgkim84@gmail.com&initial=KDG&v=0.2.1)
+![Sample](http://geekple.com:18191/?seed=admin@geekple.com&initial=K&v=0.2.1)
+![Sample](http://geekple.com:18191/?seed=admin@geekple.com&initial=DG&v=0.2.1)
+![Sample](http://geekple.com:18191/?seed=admin@geekple.com&initial=KDG&v=0.2.1)
+
+**Random Image** : http://geekple.com:18191/
+
+![Sample](http://geekple.com:18191/?v=0.2.1&i=1)
+![Sample](http://geekple.com:18191/?v=0.2.1&i=2)
+![Sample](http://geekple.com:18191/?v=0.2.1&i=3)
+
+seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합니다. 물론 글자가 포함되는 경우에는 글자의 백그라운드는 채워집니다.
+
+![Sample](https://raw.github.com/hackrslab/random-avatar/0.2.1/samples/random.png)
+
 ## ChangeLogs
 
 * 0.2.1
@@ -49,12 +70,6 @@ lazy val defaultSettings = Seq(
   )
 )
 ```
-
-## Sample
-
-seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합니다. 물론 글자가 포함되는 경우에는 글자의 백그라운드는 채워집니다.
-
-![Sample](https://raw.github.com/hackrslab/random-avatar/0.2.1/samples/random.png)
 
 ## Sample code
 
