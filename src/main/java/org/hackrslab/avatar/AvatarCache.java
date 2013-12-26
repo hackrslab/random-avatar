@@ -4,8 +4,6 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 /**
  * Simple LRU Cache Implementation
@@ -13,7 +11,6 @@ import java.util.logging.Logger;
  * @author Daegeun Kim (dgkim84@gmail.com)
  */
 class AvatarCache {
-    private Logger logger = LogManager.getLogManager().getLogger(getClass().getName());
     private int maximumNumberOfItems;
     private int maximumNumberOfBytes;
     private int numberOfBytes;
@@ -36,7 +33,6 @@ class AvatarCache {
         if (bytesRef.get() == null) {
             this.bytesRef = new WeakReference<Map<String, byte[]>>(new HashMap<String, byte[]>());
             this.numberOfBytes = 0;
-            logger.info("avatar cache garbage collected.");
         }
         Map<String, byte[]> bytes = bytesRef.get();
         if (bytes.containsKey(key)) {
@@ -55,7 +51,6 @@ class AvatarCache {
         if (bytesRef.get() == null) {
             this.bytesRef = new WeakReference<Map<String, byte[]>>(new HashMap<String, byte[]>());
             this.numberOfBytes = 0;
-            logger.info("avatar cache garbage collected.");
         }
         int estimatedSize = numberOfBytes + value.length - (
                 bytesRef.get().containsKey(key) ? bytesRef.get().get(key).length : 0);

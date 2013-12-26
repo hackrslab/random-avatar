@@ -229,7 +229,7 @@ public class RandomAvatar {
         // initial
         if (extra != null && extra.initial != null) {
             holeBlockSizeY = blockSize / 2;
-            Font f = new Font("Serif", Font.BOLD, (int)(holeBlockSizeY * size * 0.8));
+            Font f = new Font("Serif", Font.BOLD, (int)(holeBlockSizeY * size * 0.95));
             FontMetrics fm = g.getFontMetrics(f);
             java.awt.geom.Rectangle2D rect = fm.getStringBounds(extra.initial, g);
             int textHeight = (int)(rect.getHeight()); 
