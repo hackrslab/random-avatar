@@ -43,12 +43,22 @@ public class RandomAvatar {
             return seed(seed, 0);
         }
 
+        public static Extra seed(String seed, String initial) {
+            return seed(seed, initial, 1);
+        }
+
         public static Extra seed(String seed, int length) {
+            return seed(seed, null, length);
+        }
+
+        public static Extra seed(String seed, String initial, int length) {
             length = Math.max(length, 0);
             if (seed != null && seed.length() > 0) {
                 Extra extra = new Extra();
                 extra.seed = seed;
-                if (length != 0) {
+                if (initial != null && length > 0 && initial.length() >= length) {
+                    extra.initial = initial.substring(0, length);
+                } else if (length != 0) {
                     extra.initial = seed.substring(0, Math.min(seed.length(), length)).toUpperCase();
                 }
                 return extra;
