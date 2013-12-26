@@ -6,8 +6,9 @@ import java.util.ArrayList;
 public class RandomAvatarBuilder {
     private int squareSize;
     private int blockSize;
-    private boolean initial;
     private boolean asymmetry;
+    private boolean initial;
+    private boolean cache;
     private int padding;
     private int backgroundColor = -1;
     private int fontColor = 0xffffff;
@@ -29,6 +30,11 @@ public class RandomAvatarBuilder {
 
     public RandomAvatarBuilder asymmetry(boolean asymmetry) {
         this.asymmetry = asymmetry;
+        return this;
+    }
+
+    public RandomAvatarBuilder cache(boolean cache) {
+        this.cache = cache;
         return this;
     }
 
@@ -92,6 +98,7 @@ public class RandomAvatarBuilder {
         instance.setSquareSize(squareSize);
         instance.setBlockSize(blockSize);
         instance.setAsymmetry(asymmetry);
+        instance.enableCache(cache);
         instance.setPadding(padding);
         instance.setColors(colors);
         instance.setPadding(padding);

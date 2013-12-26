@@ -24,8 +24,10 @@ seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합�
 
 ## ChangeLogs
 
+* 0.2.2
+ * [#2](https://github.com/hackrslab/random-avatar/issues/2) seed를 지정한 경우 캐쉬하여 성능 개선
 * 0.2.1
- * seed를 지정하면 항상 같은 아바타가 나올 수 있도록 제공 - https://raw.github.com/hackrslab/random-avatar/0.2.1/samples/random.png
+ * [#1](https://github.com/hackrslab/random-avatar/issues/1) seed를 지정하면 항상 같은 아바타가 나올 수 있도록 제공 - https://raw.github.com/hackrslab/random-avatar/0.2.1/samples/random.png
 * 0.2.0
  * 랜덤 아바타 기능 + 3~4개의 영문자를 함께 생성할 수 있도록 기능 제공 - https://raw.github.com/hackrslab/random-avatar/0.2.0/samples/random.png
 * 0.1.0
@@ -38,6 +40,7 @@ seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합�
 * [0.1.0](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.1.0/random-avatar-0.1.0.jar)
 * [0.2.0](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.2.0/random-avatar-0.2.0.jar)
 * [0.2.1](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.2.1/random-avatar-0.2.1.jar)
+* [0.2.2](https://github.com/hackrslab/maven-repo/raw/gh-pages/org/hackrslab/random-avatar/0.2.2/random-avatar-0.2.2.jar)
 
 ### Maven
 
@@ -47,7 +50,7 @@ seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합�
     <dependency>
       <groupId>org.hackrslab</groupId>
       <artifactId>random-avatar</artifactId>
-      <version>0.2.1</version>
+      <version>0.2.2</version>
     </dependency>
   </dependencies>
 
@@ -66,7 +69,7 @@ seed-1.png 과 seed-2.png 는 블럭의 색상과 블럭의 모양이 동일합�
 lazy val defaultSettings = Seq(
   resolvers += "hackrslab-repository" at "http://hackrslab.github.io/maven-repo"
   , libraryDependencies ++= Seq(
-    "org.hackrslab" % "random-avatar" % "0.2.1"
+    "org.hackrslab" % "random-avatar" % "0.2.2"
   )
 )
 ```
@@ -87,9 +90,10 @@ public class Main {
             .squareSize(400)
             .blockSize(5)
             .asymmetry(false)
+            .cache(true) // since 0.2.2
             .padding(20)
-            .backgroundColor(0xeeeeee)
-            .fontColor(0xffffff)
+            .backgroundColor(0xeeeeee) // since 0.2.1
+            .fontColor(0xffffff) // since 0.2.1
             .addColor(127, 127, 220)
             .addColor(100, 207, 172)
             .addColor(198, 87, 181)
@@ -99,6 +103,7 @@ public class Main {
         String[] initials = "dgkim84@gmail.com,admin@geekple.com,dgkim84@daum.net".split(",");
         for (int i = 0; i < initials.length; i++) {
             generator.generate(new File("samples/avatar"+i+"-default.png"));
+            // since 0.2.1
             generator.generate(new File("samples/avatar"+i+"-initial-1.png"), RandomAvatar.Extra.initial(initials[i]));
             generator.generate(new File("samples/avatar"+i+"-initial-3.png"), RandomAvatar.Extra.initial(initials[i], 3));
             generator.generate(new File("samples/avatar"+i+"-seed-1.png"), RandomAvatar.Extra.seed(initials[i]));

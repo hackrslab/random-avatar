@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -74,6 +75,7 @@ public class RandomAvatar {
     private int backgroundColor; // -1 is transparent
     private int fontColor;
     private int padding;
+    private AvatarCache cache;
 
     public RandomAvatar() {
     }
@@ -95,6 +97,18 @@ public class RandomAvatar {
     }
 
     public void generate(OutputStream output, Extra extra) throws RandomAvatarException {
+        String cacheKey = generateCacheKey(extra);
+        if (cacheKey != null) {
+            byte[] bytes = cache.get(cacheKey);
+            if (bytes != null) {
+                try {
+                    output.write(bytes);
+                    return;
+                } catch (Exception e) {
+                    throw new RandomAvatarException(e);
+                }
+            }
+        }
         setDefaultOptions();
         boolean[] blocks = null;
         while (!validate(blocks)) {
@@ -107,9 +121,27 @@ public class RandomAvatar {
             , BufferedImage.TYPE_INT_ARGB);
         generateAvatar(avatar, blocks, extra);
         try {
-            ImageIO.write(avatar, "png", output);
+            ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            ImageIO.write(avatar, "png", byteOutput);
+            byte[] bytes = byteOutput.toByteArray();
+            byteOutput.close();
+            output.write(bytes);
+            if (cacheKey != null) {
+                cache.put(cacheKey, bytes);
+            }
         } catch (Exception e) {
             throw new RandomAvatarException(e);
+        }
+    }
+
+    String generateCacheKey(Extra extra) {
+        if (cache == null || extra == null || extra.seed == null) {
+            return null;
+        }
+        if (extra.initial == null) {
+            return extra.seed;
+        } else {
+            return extra.seed + ":" + extra.initial;
         }
     }
 
@@ -239,6 +271,12 @@ public class RandomAvatar {
 
     public void setAsymmetry(boolean asymmetry) {
         this.asymmetry = asymmetry;
+    }
+
+    public void enableCache(boolean cache) {
+        if (cache) {
+            this.cache = new AvatarCache();
+        }
     }
 
     public void setColors(int[] colors) {
